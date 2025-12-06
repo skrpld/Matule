@@ -43,7 +43,11 @@ class AppNavigation(
      * Main
      */
     fun navigateToHome() {
-        navController.navigate(AppDestinations.HOME_ROUTE)
+        navController.navigate(AppDestinations.HOME_ROUTE) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
     }
 
     fun navigateToCatalog() {
@@ -63,7 +67,7 @@ class AppNavigation(
     }
 
     fun navigateToCreateProject() {
-        navController.navigate(AppDestinations.CREATE_PROJECT_ROUTE)
+        navController.navigate(AppDestinations.PROJECT_CREATE_ROUTE)
     }
 
     /**
