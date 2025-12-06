@@ -1,0 +1,52 @@
+package com.skrpld.matule.ui.screens.auth
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import com.skrpld.matule.data.AuthState
+import com.skrpld.matule.data.repositories.AuthManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
+
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val authManager: AuthManager
+) {
+    var currentAuthState: StateFlow<AuthState> = authManager.authState
+
+    var firstNameInput by mutableStateOf("")
+    var surNameInput by mutableStateOf("")
+    var lastNameInput by mutableStateOf("")
+    var birthDateInput by mutableStateOf("")
+    var genderInput by mutableStateOf("")
+    var emailInput by mutableStateOf("")
+    var passwordInput by mutableStateOf("")
+    var confirmPasswordInput by mutableStateOf("")
+    var pinInput by mutableStateOf("")
+    var confirmPinInput by mutableStateOf("")
+
+    fun onLoginLock() {
+        authManager.loginLock(pinInput)
+    }
+
+    fun onLogin() {
+        authManager.login(emailInput, passwordInput)
+    }
+
+    fun onSignupProfile() {
+        authManager.signupProfile(firstNameInput, surNameInput, lastNameInput, birthDateInput, genderInput, emailInput)
+    }
+
+    fun onSignupPassword() {
+        authManager.signupPassword(passwordInput, confirmPasswordInput)
+    }
+
+    fun onSignupLock() {
+        authManager.signupLock(pinInput, confirmPinInput)
+    }
+
+    fun onLogout() {
+
+    }
+}
