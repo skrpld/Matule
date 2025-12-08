@@ -3,6 +3,7 @@ package com.skrpld.matule.ui.screens.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
 import com.skrpld.matule.data.AuthState
 import com.skrpld.matule.data.repositories.AuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authManager: AuthManager
-) {
+) : ViewModel() {
     var currentAuthState: StateFlow<AuthState> = authManager.authState
 
     var firstNameInput by mutableStateOf("")
