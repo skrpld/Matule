@@ -1,5 +1,6 @@
 package com.skrpld.matule.ui.screens.auth
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,22 +29,27 @@ class AuthViewModel @Inject constructor(
     var confirmPinInput by mutableStateOf("")
 
     fun onLoginLock() {
+        Log.d("AuthViewModel", "Pin input Done")
         authManager.loginLock(pinInput)
     }
 
     fun onLogin() {
+        Log.d("AuthViewModel", "Start login")
         authManager.login(emailInput, passwordInput)
     }
 
     fun onSignupProfile() {
+        Log.d("AuthViewModel", "Start signup profile")
         authManager.signupProfile(firstNameInput, surNameInput, lastNameInput, birthDateInput, genderInput, emailInput)
     }
 
     fun onSignupPassword() {
+        Log.d("AuthViewModel", "Start signup password")
         authManager.signupPassword(passwordInput, confirmPasswordInput)
     }
 
     fun onSignupLock() {
+        Log.d("AuthViewModel", "Start signup lock")
         authManager.signupLock(pinInput, confirmPinInput)
     }
 
