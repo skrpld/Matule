@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
-    alias(libs.plugins.hilt.android) apply false
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -47,10 +47,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
