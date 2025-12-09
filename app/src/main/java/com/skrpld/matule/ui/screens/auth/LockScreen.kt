@@ -18,16 +18,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+enum class LockScreenMode {
+    Login,
+    Signup
+}
+
 @Composable
 fun LockScreen(
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
+    mode: LockScreenMode = LockScreenMode.Login
 ) {
     val pinCode = viewModel.pinInput
     val maxPinLength = 4
 
     LaunchedEffect(pinCode) {
         if (pinCode.length == maxPinLength) {
-            viewModel.onLoginLock()
+            when (mode) {
+                LockScreenMode.Login -> viewModel.onLoginLock()
+                LockScreenMode.Signup -> viewModel.onSignupLock()
+            }
         }
     }
 
@@ -42,10 +51,19 @@ fun LockScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "Вход",
+                text = if (mode == LockScreenMode.Login) "Вход" else "Создание пароля",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W700),
                 textAlign = TextAlign.Center
             )
+
+            if (mode == LockScreenMode.Signup) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Для защиты ваших персональных данных",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -181,7 +199,7 @@ fun NumpadButton(
     ) {
         if (text.isNullOrEmpty()) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft, //TODO: вставить нужную иконку
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 contentDescription = "Удалить",
                 modifier = Modifier.size(48.dp),
                 tint = contentColor
