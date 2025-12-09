@@ -11,9 +11,9 @@ object AppDestinations {
      * Login / Signup
      */
     const val LOGIN_ROUTE = "login_screen"
-    const val SIGNUP_PROFILE_ROUTE = "register_profile_screen"
-    const val SIGNUP_PASSWORD_ROUTE = "register_password_screen"
-    const val SIGNUP_LOCK_ROUTE = "register_lock_screen"
+    const val SIGNUP_PROFILE_ROUTE = "signup_profile_screen"
+    const val SIGNUP_PASSWORD_ROUTE = "signup_password_screen"
+    const val SIGNUP_LOCK_ROUTE = "signup_lock_screen"
 
     /**
      * Main

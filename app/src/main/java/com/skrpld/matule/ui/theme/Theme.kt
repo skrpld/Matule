@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 private val LightColorScheme = lightColorScheme(
     primary = Accent,
     onPrimary = White,
+    secondary = AccentInactive,
+    onSecondary = White,
     inversePrimary = AccentInactive,
     background = White,
     surface = InputBackground,

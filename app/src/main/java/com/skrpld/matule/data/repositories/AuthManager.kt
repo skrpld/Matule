@@ -26,8 +26,8 @@ class AuthManager @Inject constructor() {
         //TODO: Сверка и хеширование паролей
     }
 
-    fun signupLock(pin: String, confirmPin: String) {
-        //TODO: Сверка и хеширование
+    fun signupLock(pin: String) {
+        //TODO: Хеширование
     }
 
     fun logout() {

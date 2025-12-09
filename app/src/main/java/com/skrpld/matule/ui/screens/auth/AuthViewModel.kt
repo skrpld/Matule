@@ -26,7 +26,6 @@ class AuthViewModel @Inject constructor(
     var passwordInput by mutableStateOf("")
     var confirmPasswordInput by mutableStateOf("")
     var pinInput by mutableStateOf("")
-    var confirmPinInput by mutableStateOf("")
 
     fun onLoginLock() {
         Log.d("AuthViewModel", "Pin input Done")
@@ -50,7 +49,7 @@ class AuthViewModel @Inject constructor(
 
     fun onSignupLock() {
         Log.d("AuthViewModel", "Start signup lock")
-        authManager.signupLock(pinInput, confirmPinInput)
+        authManager.signupLock(pinInput)
     }
 
     fun onLogout() {
