@@ -21,7 +21,8 @@ import com.skrpld.matule.ui.components.auth.NextButton
 
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
+    onNavigateToSignup: () -> Unit
 ) {
     var email = viewModel.emailInput
     var password = viewModel.passwordInput
@@ -114,7 +115,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 TextButton(
-                    onClick = { TODO("Переход к регистрации") },
+                    onClick = onNavigateToSignup,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(

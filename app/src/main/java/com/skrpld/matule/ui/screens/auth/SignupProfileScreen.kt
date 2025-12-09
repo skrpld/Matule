@@ -21,7 +21,8 @@ import com.skrpld.matule.ui.components.auth.NextButton
 
 @Composable
 fun SignupProfileScreen(
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
+    onNext: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -127,6 +128,7 @@ fun SignupProfileScreen(
                 onClick = {
                     if (isFormValid) {
                         viewModel.onSignupProfile()
+                        onNext()
                     } else {
                         Toast.makeText(
                             context,

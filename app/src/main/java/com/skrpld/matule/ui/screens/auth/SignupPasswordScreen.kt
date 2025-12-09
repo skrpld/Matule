@@ -8,12 +8,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.skrpld.matule.ui.components.auth.CustomTextField
 import com.skrpld.matule.ui.components.auth.NextButton
 
 @Composable
 fun SignupPasswordScreen(
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
+    onNext: () -> Unit
 ) {
     var password = viewModel.passwordInput
     var confirmedPassword = viewModel.confirmPasswordInput
@@ -92,6 +94,7 @@ fun SignupPasswordScreen(
                     onClick = {
                         if (isFormValid) {
                             viewModel.onSignupPassword()
+                            onNext()
                         } else {
                             Toast.makeText(
                                 context,
