@@ -1,24 +1,23 @@
 package com.skrpld.matule.ui.screens.auth
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.skrpld.matule.R
+import com.skrpld.matule.ui.components.auth.CustomTextField
+import com.skrpld.matule.ui.components.auth.NextButton
 
 @Composable
 fun LoginScreen(
@@ -26,6 +25,16 @@ fun LoginScreen(
 ) {
     var email = viewModel.emailInput
     var password = viewModel.passwordInput
+
+    val emailPattern = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$")
+
+    val passwordPattern = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}\$")
+
+    val isEmailValid = email.matches(emailPattern)
+    val isPasswordValid = password.matches(passwordPattern)
+
+    val isFormValid = isEmailValid && isPasswordValid
+    val context = LocalContext.current
 
     Scaffold { paddingValues ->
         Column(
@@ -35,15 +44,15 @@ fun LoginScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(48.dp))
 
-            Column {    // Text
-                Row {
-                    Text(
-                        text = "🖐 Добро пожаловать!",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
+            Column(    // Text
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "🖐 Добро пожаловать!",
+                    style = MaterialTheme.typography.titleLarge
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -63,9 +72,10 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(4.dp))
                 CustomTextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = {
+                        viewModel.emailInput = it
+                    },
                     placeholder = "example@mail.com",
-                    bgColor = MaterialTheme.colorScheme.surfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -77,31 +87,29 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(4.dp))
                 CustomTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = {
+                        viewModel.passwordInput = it
+                    },
                     placeholder = "",
-                    bgColor = MaterialTheme.colorScheme.surfaceVariant,
                     isPassword = true
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Button(
-                    onClick = { viewModel.onLogin() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary, //TODO: актив / инактив
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-
-                    )
-                ) {
-                    Text(
-                        text = "Далее",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                }
+                NextButton(
+                    isFormValid = isFormValid,
+                    onClick = {
+                        if (isFormValid) {
+                            viewModel.onLogin()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Поля не заполнены или формат данных не верный",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -138,35 +146,6 @@ fun LoginScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    bgColor: Color,
-    isPassword: Boolean = false
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(placeholder, color = Color.Gray.copy(alpha = 0.5f)) },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = bgColor,
-            unfocusedContainerColor = bgColor,
-            disabledContainerColor = bgColor,
-            cursorColor = Color.Black,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = if (isPassword) KeyboardOptions(keyboardType = KeyboardType.Password) else KeyboardOptions.Default
-    )
 }
 
 @Composable
