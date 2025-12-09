@@ -14,21 +14,26 @@ class AuthManager @Inject constructor() {
         //TODO: Хешироввание
     }
 
-    fun login(email: String, password: String) {
-        //TODO: Проверить соответсвие email, хешировать пароль
+    fun login(
+        email: String,
+        password: String
+    ) {
+        //TODO: Хешировать пароль
     }
 
-    fun signupProfile(firstName: String, surName: String, lastName: String, birthDate: String, gender: String, email: String) {
-        //TODO: Проверка даты, корректной почты
+    fun registerFullUser(
+        firstName: String,
+        surName: String,
+        lastName: String,
+        birthDate: String,
+        gender: String,
+        email: String,
+        password: String,
+        pin : String
+    ) {
+        //TODO: Зарегать пользователя
     }
 
-    fun signupPassword(password: String, confirmPassword: String) {
-        //TODO: Сверка и хеширование паролей
-    }
-
-    fun signupLock(pin: String) {
-        //TODO: Хеширование
-    }
 
     fun logout() {
 

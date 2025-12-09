@@ -127,7 +127,6 @@ fun SignupProfileScreen(
                 isFormValid = isFormValid,
                 onClick = {
                     if (isFormValid) {
-                        viewModel.onSignupProfile()
                         onNext()
                     } else {
                         Toast.makeText(

@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 
 enum class LockScreenMode {
     Login,
@@ -36,7 +35,7 @@ fun LockScreen(
         if (pinCode.length == maxPinLength) {
             when (mode) {
                 LockScreenMode.Login -> viewModel.onLoginLock()
-                LockScreenMode.Signup -> viewModel.onSignupLock()
+                LockScreenMode.Signup -> viewModel.onSignupComplete()
             }
         }
     }
