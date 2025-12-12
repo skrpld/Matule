@@ -21,7 +21,7 @@ class AuthManager @Inject constructor() {
         //TODO: Хешировать пароль
     }
 
-    fun registerFullUser(
+    fun signupComplete(
         firstName: String,
         surName: String,
         lastName: String,

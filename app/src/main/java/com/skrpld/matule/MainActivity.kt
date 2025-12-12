@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
             var showSplashScreen by remember { mutableStateOf(true) }
 
             LaunchedEffect(Unit) {
-                delay(2000)
+                delay(1500)
                 showSplashScreen = false
             }
 

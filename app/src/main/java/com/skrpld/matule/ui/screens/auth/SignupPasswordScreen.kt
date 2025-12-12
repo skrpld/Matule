@@ -16,8 +16,8 @@ fun SignupPasswordScreen(
     viewModel: AuthViewModel,
     onNext: () -> Unit
 ) {
-    var password = viewModel.passwordInput
-    var confirmedPassword = viewModel.confirmPasswordInput
+    val password = viewModel.passwordInput
+    val confirmedPassword = viewModel.confirmPasswordInput
 
     val passwordPattern = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}\$")
 

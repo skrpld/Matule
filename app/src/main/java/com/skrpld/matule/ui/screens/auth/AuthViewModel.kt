@@ -77,7 +77,7 @@ class AuthViewModel @Inject constructor(
         Log.d("AuthViewModel", "Completing signup with all data")
         viewModelScope.launch {
             try {
-                authManager.registerFullUser(
+                authManager.signupComplete(
                     firstName = firstNameInput,
                     surName = surNameInput,
                     lastName = lastNameInput,
