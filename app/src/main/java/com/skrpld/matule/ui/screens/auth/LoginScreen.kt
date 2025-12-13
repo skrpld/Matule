@@ -139,7 +139,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                SocialButton("Войти с VK", R.drawable.ic_yandex, { TODO("Вход через VK") })
+                SocialButton("Войти с VK", R.drawable.ic_vk, { TODO("Вход через VK") })
                 Spacer(modifier = Modifier.height(12.dp))
                 SocialButton("Войти с Yandex", R.drawable.ic_yandex, { TODO("Вход через Yandex") })
             }
