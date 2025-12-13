@@ -1,6 +1,6 @@
 package com.skrpld.matule.data.repositories
 
-import com.skrpld.matule.data.AuthState
+import com.skrpld.matule.data.models.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

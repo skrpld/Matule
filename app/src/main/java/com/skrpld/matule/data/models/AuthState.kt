@@ -1,4 +1,4 @@
-package com.skrpld.matule.data
+package com.skrpld.matule.data.models
 
 sealed class AuthState {
     data object LoggedIn : AuthState()

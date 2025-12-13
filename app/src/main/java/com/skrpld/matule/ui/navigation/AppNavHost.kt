@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.skrpld.matule.data.AuthState
+import com.skrpld.matule.data.models.AuthState
 import com.skrpld.matule.ui.screens.auth.*
 
 @Composable
