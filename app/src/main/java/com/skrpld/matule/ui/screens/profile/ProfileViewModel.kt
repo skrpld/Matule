@@ -12,8 +12,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : ViewModel() {
-    var firstName by mutableStateOf(appRepository.firstName)
-    var email by mutableStateOf(appRepository.email)
+    var firstName by mutableStateOf(appRepository.firstName.value)
+    var email by mutableStateOf(appRepository.email.value)
 
     var showNotifications by mutableStateOf(true)
 

@@ -1,17 +1,16 @@
 package com.skrpld.matule.data.repositories
 
-import com.skrpld.matule.data.models.AuthState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class AppRepository @Inject constructor() {
-    private val _firstName = MutableStateFlow<String>("")
+    private val _firstName = MutableStateFlow("")
     val firstName: StateFlow<String> = _firstName.asStateFlow()
 
-    private val _email = MutableStateFlow<AuthState>(AuthState.LoggedOut)
-    val email: StateFlow<AuthState> = _email.asStateFlow()
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
 
     fun logout() {
         // TODO: Выход из аккаунта
