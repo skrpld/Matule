@@ -33,9 +33,4 @@ class AuthManager @Inject constructor() {
     ) {
         //TODO: Зарегать пользователя
     }
-
-
-    fun logout() {
-
-    }
 }

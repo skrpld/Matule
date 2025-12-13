@@ -93,13 +93,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun onLogout() {
-        viewModelScope.launch {
-            authManager.logout()
-            clearFields()
-        }
-    }
-
     private fun clearFields() {
         firstNameInput = ""
         lastNameInput = ""
