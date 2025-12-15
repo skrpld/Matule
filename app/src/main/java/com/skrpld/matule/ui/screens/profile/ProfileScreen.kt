@@ -22,22 +22,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.skrpld.matule.ui.components.AppBottomBar
 import com.skrpld.matule.ui.theme.*
 
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel
+    navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val firstName = viewModel.firstName
     val email = viewModel.email
     val showNotification = viewModel.showNotifications
 
     Scaffold(
-        containerColor = Color.White,
-        bottomBar = {
-            AppBottomBar()
-        }
+        bottomBar = { AppBottomBar(navController) },
+        containerColor = Color.White
     ) { paddingValues ->
         Column(
             modifier = Modifier

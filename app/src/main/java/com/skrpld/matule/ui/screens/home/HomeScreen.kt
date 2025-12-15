@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.skrpld.matule.R
 import com.skrpld.matule.data.models.Product
 import com.skrpld.matule.data.models.Promotion
@@ -32,13 +33,14 @@ import com.skrpld.matule.ui.theme.*
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val promotions by viewModel.promotions.collectAsState()
     val filteredProducts = viewModel.filteredProducts // derivedState не требует collectAsState внутри Composable, если читается value, но здесь мы используем свойство by derivedStateOf
 
     Scaffold(
-        bottomBar = { AppBottomBar() },
+        bottomBar = { AppBottomBar(navController) },
         containerColor = InputBackground // Фон всего экрана (светло-серый)
     ) { paddingValues ->
         LazyColumn(

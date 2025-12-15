@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.skrpld.matule.R
 import com.skrpld.matule.data.models.Project
@@ -30,16 +32,14 @@ import com.skrpld.matule.ui.theme.*
 
 @Composable
 fun ProjectsScreen(
+    navController: NavController,
     viewModel: ProjectsViewModel = hiltViewModel(),
-    // В реальном приложении AppNavigation передается из NavGraph,
-    // здесь создадим заглушку для совместимости с сигнатурой
-    navController: androidx.navigation.NavHostController = rememberNavController()
 ) {
-    val navigation = AppNavigation(navController)
+    val navigation = remember(navController) { AppNavigation(navController as androidx.navigation.NavHostController) }
     val projects by viewModel.projects.collectAsState()
 
     Scaffold(
-        bottomBar = { AppBottomBar() }, // Активная вкладка должна управляться внутри BottomBar
+        bottomBar = { AppBottomBar(navController) }, // Активная вкладка должна управляться внутри BottomBar
         containerColor = InputBackground
     ) { paddingValues ->
         LazyColumn(
