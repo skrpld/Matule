@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.skrpld.matule.data.models.AuthState
 import com.skrpld.matule.ui.screens.auth.*
+import com.skrpld.matule.ui.screens.home.HomeScreen
 
 @Composable
 fun AppNavHost(
@@ -17,7 +18,7 @@ fun AppNavHost(
 
     val authViewModel: AuthViewModel = hiltViewModel()
 
-    val authState by authViewModel.currentAuthState.collectAsState()
+    val authState = AuthState.LoggedIn // by authViewModel.currentAuthState.collectAsState()
 
     LaunchedEffect(authState) {
         if (authState is AuthState.LoggedIn) {
@@ -65,7 +66,7 @@ fun AppNavHost(
         }
 
         composable(AppDestinations.HOME_ROUTE) {
-
+            HomeScreen()
         }
     }
 }
