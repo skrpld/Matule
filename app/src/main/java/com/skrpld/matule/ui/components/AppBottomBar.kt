@@ -18,9 +18,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.skrpld.matule.R
 import com.skrpld.matule.ui.navigation.AppDestinations
-import com.skrpld.matule.ui.theme.Accent
-import com.skrpld.matule.ui.theme.InputIcon
-import com.skrpld.matule.ui.theme.White
+import com.skrpld.uikit.theme.Accent
+import com.skrpld.uikit.theme.InputIcon
+import com.skrpld.uikit.theme.White
 
 @Composable
 fun AppBottomBar(

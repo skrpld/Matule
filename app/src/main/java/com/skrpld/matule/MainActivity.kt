@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.skrpld.matule.ui.navigation.AppNavHost
 import com.skrpld.matule.ui.screens.splash.SplashScreen
-import com.skrpld.matule.ui.theme.MatuleTheme
+import com.skrpld.uikit.theme.MatuleTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 

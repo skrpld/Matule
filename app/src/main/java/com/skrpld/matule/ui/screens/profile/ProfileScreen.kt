@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.skrpld.matule.ui.components.AppBottomBar
-import com.skrpld.matule.ui.theme.*
+import com.skrpld.matule.ui.theme.Accent
+import com.skrpld.matule.ui.theme.Caption
+import com.skrpld.matule.ui.theme.Error
+import com.skrpld.matule.ui.theme.White
 
 @Composable
 fun ProfileScreen(
