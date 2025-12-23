@@ -1,15 +1,15 @@
 package com.skrpld.matule
 
-import org.koin.dsl.module
 import android.app.Application
 import com.skrpld.matule.data.repositories.AppRepository
 import com.skrpld.matule.data.repositories.AuthManager
 import com.skrpld.matule.data.repositories.MainRepository
 import com.skrpld.matule.data.repositories.ProjectsRepository
+import com.skrpld.matule.ui.screens.auth.AuthViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.dsl.viewModel
-import com.skrpld.matule.ui.screens.auth.AuthViewModel
+import org.koin.dsl.module
 
 class MatuleApplication : Application() {
     override fun onCreate() {
