@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Matule"
 include(":app")
- 
+include(":UIKIT")
