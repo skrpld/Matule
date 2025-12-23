@@ -4,9 +4,8 @@ import com.skrpld.matule.data.models.Project
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-class ProjectsRepository @Inject constructor() {
+class ProjectsRepository() {
 
     // Имитация списка проектов
     private val _projects = MutableStateFlow<List<Project>>(

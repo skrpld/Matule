@@ -5,13 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skrpld.matule.data.repositories.ProjectsRepository
 import com.skrpld.matule.ui.navigation.AppNavigation
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import javax.inject.Inject
 
-@HiltViewModel
-class ProjectsViewModel @Inject constructor(
+class ProjectsViewModel(
     private val projectsRepository: ProjectsRepository
     // AppNavigation обычно передается в Composable, но если он инжектится в VM в вашей архитектуре, то раскомментируйте
 ) : ViewModel() {

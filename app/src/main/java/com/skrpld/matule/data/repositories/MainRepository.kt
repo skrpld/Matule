@@ -5,9 +5,8 @@ import com.skrpld.matule.data.models.Promotion
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
-class MainRepository @Inject constructor() {
+class MainRepository() {
 
     // Имитация базы данных или API для акций
     private val _promotions = MutableStateFlow<List<Promotion>>(
