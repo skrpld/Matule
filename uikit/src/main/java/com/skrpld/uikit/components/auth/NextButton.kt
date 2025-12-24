@@ -1,4 +1,4 @@
-package com.skrpld.matule.ui.components.auth
+package com.skrpld.uikit.components.auth
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

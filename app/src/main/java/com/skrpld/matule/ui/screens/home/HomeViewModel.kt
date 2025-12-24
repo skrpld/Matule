@@ -16,7 +16,6 @@ class HomeViewModel(
     private val mainRepository: MainRepository
 ) : ViewModel() {
 
-    // Данные из репозитория
     val promotions = mainRepository.promotions.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -29,24 +28,19 @@ class HomeViewModel(
         emptyList()
     )
 
-    // Состояние UI
     var searchQuery by mutableStateOf("")
     var selectedCategory by mutableStateOf("Все")
     var categories by mutableStateOf(listOf("Все"))
 
-    // Фильтрация списка товаров
     val filteredProducts by derivedStateOf {
         val products = allProducts.value
         products.filter { product ->
-            // Фильтр по категории
             val categoryMatch = if (selectedCategory == "Все") true else {
-                // В реальном приложении лучше использовать ID категорий
                 if (selectedCategory == "Мужчинам") product.category.contains("Мужская")
                 else if (selectedCategory == "Женщинам") product.category.contains("Женская")
                 else true
             }
 
-            // Фильтр по поиску
             val searchMatch = if (searchQuery.isBlank()) true else {
                 product.title.contains(searchQuery, ignoreCase = true)
             }
@@ -75,6 +69,5 @@ class HomeViewModel(
 
     fun onAddToCart(productId: Int) {
         Log.d("HomeViewModel", "Add to cart: $productId")
-        // Логика добавления в корзину
     }
 }

@@ -55,7 +55,7 @@ fun ProjectsScreen(
     val projects by viewModel.projects.collectAsState()
 
     Scaffold(
-        bottomBar = { AppBottomBar(navController) }, // Активная вкладка должна управляться внутри BottomBar
+        bottomBar = { AppBottomBar(navController) },
         containerColor = InputBackground
     ) { paddingValues ->
         LazyColumn(
@@ -65,7 +65,6 @@ fun ProjectsScreen(
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Заголовок и кнопка добавления
             item {
                 Spacer(modifier = Modifier.height(16.dp))
                 ProjectsHeader(
@@ -74,7 +73,6 @@ fun ProjectsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // Список проектов
             items(projects) { project ->
                 ProjectItemCard(
                     project = project,
@@ -82,13 +80,10 @@ fun ProjectsScreen(
                 )
             }
 
-            // Отступ снизу для красоты
             item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
-
-// --- Компоненты ---
 
 @Composable
 fun ProjectsHeader(
@@ -99,12 +94,6 @@ fun ProjectsHeader(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Чтобы текст был ровно по центру, используем Box или weight,
-        // но так как справа есть иконка, используем трюк с весом или Box.
-        // Здесь простой вариант:
-
-        // Пустой Box для баланса (если нужна строгая центровка заголовка относительно экрана)
-        // Но на скриншоте заголовок по центру, а плюс справа.
         Box(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "Проекты",
@@ -114,9 +103,9 @@ fun ProjectsHeader(
             )
 
             Icon(
-                imageVector = Icons.Default.Add, // Или painterResource(R.drawable.ic_plus)
+                imageVector = Icons.Default.Add,
                 contentDescription = "Add Project",
-                tint = Caption, // Серый цвет как на макете
+                tint = Caption,
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
                     .clickable { onAddClick() }
@@ -134,7 +123,7 @@ fun ProjectItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp), // Фиксированная высота или wrapContent
+            .height(110.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = White),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -145,14 +134,12 @@ fun ProjectItemCard(
                 .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Название проекта
             Text(
                 text = project.title,
-                style = Typography.bodyLarge.copy(fontWeight = FontWeight.Medium), // Чуть жирнее обычного
+                style = Typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
                 color = Black
             )
 
-            // Нижняя строка: Дата и Кнопка
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -161,15 +148,15 @@ fun ProjectItemCard(
                 Text(
                     text = project.dateDisplay,
                     style = Typography.labelMedium,
-                    color = Description // Светло-серый цвет
+                    color = Description
                 )
 
                 Button(
                     onClick = onOpenClick,
                     colors = ButtonDefaults.buttonColors(containerColor = Accent),
-                    shape = RoundedCornerShape(10.dp), // Скругление кнопки
+                    shape = RoundedCornerShape(10.dp),
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
-                    modifier = Modifier.height(34.dp) // Компактная кнопка
+                    modifier = Modifier.height(34.dp)
                 ) {
                     Text(
                         text = "Открыть",

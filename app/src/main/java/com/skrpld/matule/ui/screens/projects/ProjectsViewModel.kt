@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.stateIn
 
 class ProjectsViewModel(
     private val projectsRepository: ProjectsRepository
-    // AppNavigation обычно передается в Composable, но если он инжектится в VM в вашей архитектуре, то раскомментируйте
 ) : ViewModel() {
 
     val projects = projectsRepository.projects.stateIn(
@@ -20,12 +19,10 @@ class ProjectsViewModel(
     )
 
     fun onAddProjectClick(navigation: AppNavigation) {
-        // Переход на экран создания проекта
         navigation.navigateToCreateProject()
     }
 
     fun onOpenProject(projectId: Int) {
         Log.d("ProjectsViewModel", "Open project: $projectId")
-        // Логика открытия проекта
     }
 }

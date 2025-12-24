@@ -63,11 +63,11 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val promotions by viewModel.promotions.collectAsState()
-    val filteredProducts = viewModel.filteredProducts // derivedState не требует collectAsState внутри Composable, если читается value, но здесь мы используем свойство by derivedStateOf
+    val filteredProducts = viewModel.filteredProducts
 
     Scaffold(
         bottomBar = { AppBottomBar(navController) },
-        containerColor = InputBackground // Фон всего экрана (светло-серый)
+        containerColor = InputBackground
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -76,10 +76,8 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Отступ сверху
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            // Поиск
             item {
                 SearchBar(
                     value = viewModel.searchQuery,
@@ -87,7 +85,6 @@ fun HomeScreen(
                 )
             }
 
-            // Блок Акции
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
@@ -99,7 +96,6 @@ fun HomeScreen(
                 }
             }
 
-            // Блок Каталог (Фильтры)
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
@@ -115,7 +111,6 @@ fun HomeScreen(
                 }
             }
 
-            // Список товаров
             items(filteredProducts) { product ->
                 ProductCard(
                     product = product,
@@ -123,13 +118,10 @@ fun HomeScreen(
                 )
             }
 
-            // Отступ снизу
             item { Spacer(modifier = Modifier.height(16.dp)) }
         }
     }
 }
-
-// --- Компоненты ---
 
 @Composable
 fun SearchBar(
@@ -171,7 +163,7 @@ fun PromotionsRow(promotions: List<Promotion>) {
         items(promotions) { promo ->
             Box(
                 modifier = Modifier
-                    .width(260.dp) // Ширина карточки акции
+                    .width(260.dp)
                     .height(150.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color(promo.backgroundColor))
@@ -192,18 +184,15 @@ fun PromotionsRow(promotions: List<Promotion>) {
                     )
                 }
 
-                // Изображение (Заглушка, так как нет реальных ресурсов)
-                // В реальном коде: Image(painter = painterResource(id = R.drawable.bottle)...)
-                // Для примера используем иконку
                 Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground), // Заглушка
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .size(100.dp)
-                        .offset(x = 10.dp, y = 10.dp), // Сдвиг для эффекта
+                        .offset(x = 10.dp, y = 10.dp),
                     contentScale = ContentScale.Fit,
-                    alpha = 0.5f // Прозрачность т.к. это заглушка
+                    alpha = 0.5f
                 )
             }
         }
@@ -250,7 +239,7 @@ fun ProductCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp) // На макете плоские карточки
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
