@@ -73,7 +73,7 @@ private data class BottomNavItem(
     val iconRes: Int
 )
 
-@Preview(showBackground = true, name = "Главная выбрана")
+@Preview(showBackground = true)
 @Composable
 fun TabBarHomePreview() {
     MatuleTheme {
@@ -86,7 +86,7 @@ fun TabBarHomePreview() {
     }
 }
 
-@Preview(showBackground = true, name = "Проекты выбраны")
+@Preview(showBackground = true)
 @Composable
 fun TabBarProjectsPreview() {
     MatuleTheme {
