@@ -39,7 +39,7 @@ enum class ChipsStyle(
 }
 
 @Composable
-fun Chips(
+fun Chip(
     modifier: Modifier = Modifier,
     text: String,
     style: ChipsStyle = ChipsStyle.Active,
@@ -80,8 +80,8 @@ fun ChipsPreview() {
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Chips(text = "Популярное", style = ChipsStyle.Active)
-            Chips(text = "Популярное", style = ChipsStyle.Inactive)
+            Chip(text = "Популярное", style = ChipsStyle.Active)
+            Chip(text = "Популярное", style = ChipsStyle.Inactive)
         }
     }
 }

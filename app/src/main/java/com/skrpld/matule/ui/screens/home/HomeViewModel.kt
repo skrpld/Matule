@@ -33,16 +33,23 @@ class HomeViewModel(
     var categories by mutableStateOf(listOf("Все"))
 
     val filteredProducts by derivedStateOf {
-        val products = allProducts.value
-        products.filter { product ->
-            val categoryMatch = if (selectedCategory == "Все") true else {
-                if (selectedCategory == "Мужчинам") product.category.contains("Мужская")
-                else if (selectedCategory == "Женщинам") product.category.contains("Женская")
-                else true
+        val query = searchQuery
+        val category = selectedCategory
+        val productsList = allProducts.value
+
+        productsList.filter { product ->
+            val categoryMatch = if (category == "Все") {
+                true
+            } else {
+                product.category.equals(category, ignoreCase = true) ||
+                        product.category.contains(category, ignoreCase = true)
             }
 
-            val searchMatch = if (searchQuery.isBlank()) true else {
-                product.title.contains(searchQuery, ignoreCase = true)
+            val searchMatch = if (query.isBlank()) {
+                true
+            } else {
+                product.title.contains(query, ignoreCase = true) ||
+                        product.description.contains(query, ignoreCase = true)
             }
 
             categoryMatch && searchMatch
@@ -56,9 +63,15 @@ class HomeViewModel(
     private fun loadCategories() {
         viewModelScope.launch {
             try {
-                categories = mainRepository.getCategories()
+                val remoteCategories = mainRepository.getCategories()
+                categories = if (!remoteCategories.contains("Все")) {
+                    listOf("Все") + remoteCategories
+                } else {
+                    remoteCategories
+                }
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Error loading categories", e)
+                categories = listOf("Все", "Популярные", "Мужчинам", "Женщинам")
             }
         }
     }
@@ -67,7 +80,14 @@ class HomeViewModel(
         selectedCategory = category
     }
 
-    fun onAddToCart(productId: Int) {
-        Log.d("HomeViewModel", "Add to cart: $productId")
+    fun onAddToCart(productId: String) {
+        Log.d("HomeViewModel", "Добавлено в корзину: $productId")
+        viewModelScope.launch {
+            try {
+                mainRepository.addToCart(productId)
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Ошибка при добавлении в корзину", e)
+            }
+        }
     }
 }

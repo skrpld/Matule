@@ -3,41 +3,29 @@ package com.skrpld.matule.ui.screens.auth
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.skrpld.matule.ui.components.auth.CustomTextField
-import com.skrpld.matule.ui.components.auth.NextButton
+import com.skrpld.uikit.components.buttons.ButtonStyle
+import com.skrpld.uikit.components.buttons.CommonButton
+import com.skrpld.uikit.components.input.TextField
+import com.skrpld.uikit.theme.Caption
+import org.koin.androidx.compose.koinViewModel
+import com.skrpld.uikit.R
 
 @Composable
 fun SignupProfileScreen(
-    viewModel: AuthViewModel,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    viewModel: AuthViewModel = koinViewModel()
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -49,15 +37,16 @@ fun SignupProfileScreen(
     val gender = viewModel.genderInput
     val email = viewModel.emailInput
 
-    val emailPattern = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$")
+    val emailPattern = remember { Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$") }
 
-    val isFormValid =
+    val isFormValid = remember(firstName, lastName, surName, birthDate, gender, email) {
         firstName.isNotEmpty() &&
                 lastName.isNotEmpty() &&
                 surName.isNotEmpty() &&
-                birthDate.isNotEmpty() && // TODO: написать паттерн
+                birthDate.isNotEmpty() &&
                 gender.isNotEmpty() &&
                 email.matches(emailPattern)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
@@ -77,81 +66,82 @@ fun SignupProfileScreen(
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = "Без профиля вы не сможете создавать проекты.\n" +
                             "В профиле будут храниться результаты проектов и ваши описания.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = Caption
                 )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Column {
-                CustomTextField(
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                TextField(
+                    label = "Имя",
                     value = firstName,
                     onValueChange = { viewModel.firstNameInput = it },
-                    placeholder = "Имя"
+                    placeholder = "Введите имя"
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                CustomTextField(
+                TextField(
+                    label = "Отчество",
                     value = surName,
                     onValueChange = { viewModel.surNameInput = it },
-                    placeholder = "Отчество"
+                    placeholder = "Введите отчество"
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                CustomTextField(
+                TextField(
+                    label = "Фамилия",
                     value = lastName,
                     onValueChange = { viewModel.lastNameInput = it },
-                    placeholder = "Фамилия"
+                    placeholder = "Введите фамилию"
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                CustomTextField(
+                TextField(
+                    label = "Дата рождения",
                     value = birthDate,
                     onValueChange = { viewModel.birthDateInput = it },
-                    placeholder = "Дата рождения"
+                    placeholder = "ДД.ММ.ГГГГ",
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 GenderDropdownField(
                     selectedGender = gender,
                     onGenderSelected = { viewModel.genderInput = it }
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                CustomTextField(
+                TextField(
+                    label = "Почта",
                     value = email,
                     onValueChange = { viewModel.emailInput = it },
-                    placeholder = "Почта"
+                    placeholder = "example@mail.com",
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            NextButton(
-                isFormValid = isFormValid,
+            CommonButton(
+                text = "Далее",
+                style = if (isFormValid) ButtonStyle.Active else ButtonStyle.Inactive,
                 onClick = {
                     if (isFormValid) {
                         onNext()
                     } else {
                         Toast.makeText(
                             context,
-                            "Поля не заполнены или формат данных не верный",
+                            "Поля не заполнены или формат данных неверный",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -167,19 +157,21 @@ fun GenderDropdownField(
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        CustomTextField(
+        TextField(
+            label = "Пол",
             value = selectedGender,
             onValueChange = {},
-            placeholder = "Пол"
+            placeholder = "Выберите пол"
         )
 
         Icon(
-            imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+            painter = painterResource(id = R.drawable.ic_chevron_down),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(end = 12.dp),
-            tint = Color.Gray
+                .padding(top = 28.dp)
+                .padding(end = 16.dp),
+            tint = Caption
         )
 
         Box(
@@ -192,7 +184,7 @@ fun GenderDropdownField(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth(0.85f)
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             genderOptions.forEach { gender ->

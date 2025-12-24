@@ -2,35 +2,12 @@ package com.skrpld.matule.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,45 +20,50 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.skrpld.matule.R
 import com.skrpld.matule.data.models.Product
 import com.skrpld.matule.data.models.Promotion
-import com.skrpld.matule.ui.components.AppBottomBar
-import com.skrpld.matule.ui.theme.Accent
-import com.skrpld.matule.ui.theme.Black
-import com.skrpld.matule.ui.theme.Caption
-import com.skrpld.matule.ui.theme.Description
-import com.skrpld.matule.ui.theme.InputBackground
-import com.skrpld.matule.ui.theme.Typography
-import com.skrpld.matule.ui.theme.White
+import com.skrpld.uikit.components.CategorySelector
+import com.skrpld.uikit.components.TabBar
+import com.skrpld.uikit.components.buttons.ButtonStyle
+import com.skrpld.uikit.components.buttons.CommonButton
+import com.skrpld.uikit.components.input.SearchField
+import com.skrpld.uikit.theme.Black
+import com.skrpld.uikit.theme.Description
+import com.skrpld.uikit.theme.InputBackground
+import com.skrpld.uikit.theme.White
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    onNavigateToTab: (Int) -> Unit,
+    viewModel: HomeViewModel = koinViewModel()
 ) {
     val promotions by viewModel.promotions.collectAsState()
     val filteredProducts = viewModel.filteredProducts
 
     Scaffold(
-        bottomBar = { AppBottomBar(navController) },
+        bottomBar = {
+            TabBar(
+                selectedIndex = 0,
+                onItemSelected = { index -> onNavigateToTab(index) }
+            )
+        },
         containerColor = InputBackground
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp),
+                .padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             item { Spacer(modifier = Modifier.height(16.dp)) }
 
             item {
-                SearchBar(
+                SearchField(
                     value = viewModel.searchQuery,
-                    onValueChange = { viewModel.searchQuery = it }
+                    onValueChange = { viewModel.searchQuery = it },
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
 
@@ -89,7 +71,8 @@ fun HomeScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
                         text = "Акции и новости",
-                        style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(horizontal = 20.dp),
                         color = Black
                     )
                     PromotionsRow(promotions = promotions)
@@ -100,22 +83,28 @@ fun HomeScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
                         text = "Каталог описаний",
-                        style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(horizontal = 20.dp),
                         color = Black
                     )
-                    CategoriesRow(
+                    CategorySelector(
                         categories = viewModel.categories,
                         selectedCategory = viewModel.selectedCategory,
-                        onCategorySelect = viewModel::onCategorySelected
+                        onCategorySelected = { viewModel.onCategorySelected(it) }
                     )
                 }
             }
 
-            items(filteredProducts) { product ->
-                ProductCard(
-                    product = product,
-                    onAddClick = { viewModel.onAddToCart(product.id) }
-                )
+            items(
+                items = filteredProducts,
+                key = { it.id }
+            ) { product ->
+                Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    ProductCard(
+                        product = product,
+                        onAddClick = { viewModel.onAddToCart(product.id) }
+                    )
+                }
             }
 
             item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -124,43 +113,15 @@ fun HomeScreen(
 }
 
 @Composable
-fun SearchBar(
-    value: String,
-    onValueChange: (String) -> Unit
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp)),
-        placeholder = {
-            Text(text = "Искать описания", style = Typography.bodyLarge, color = Caption)
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search",
-                tint = Caption
-            )
-        },
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = White,
-            unfocusedContainerColor = White,
-            disabledContainerColor = White,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        singleLine = true
-    )
-}
-
-@Composable
 fun PromotionsRow(promotions: List<Promotion>) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
-        items(promotions) { promo ->
+        items(
+            items = promotions,
+            key = { it.id }
+        ) { promo ->
             Box(
                 modifier = Modifier
                     .width(260.dp)
@@ -172,7 +133,7 @@ fun PromotionsRow(promotions: List<Promotion>) {
                 Column(modifier = Modifier.align(Alignment.CenterStart)) {
                     Text(
                         text = promo.title,
-                        style = Typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             color = White
                         )
@@ -180,7 +141,7 @@ fun PromotionsRow(promotions: List<Promotion>) {
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = promo.price,
-                        style = Typography.titleLarge.copy(color = White)
+                        style = MaterialTheme.typography.titleLarge.copy(color = White)
                     )
                 }
 
@@ -193,37 +154,6 @@ fun PromotionsRow(promotions: List<Promotion>) {
                         .offset(x = 10.dp, y = 10.dp),
                     contentScale = ContentScale.Fit,
                     alpha = 0.5f
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun CategoriesRow(
-    categories: List<String>,
-    selectedCategory: String,
-    onCategorySelect: (String) -> Unit
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(categories) { category ->
-            val isSelected = category == selectedCategory
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(if (isSelected) Accent else White)
-                    .clickable { onCategorySelect(category) }
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = category,
-                    style = Typography.bodyLarge.copy(
-                        fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal
-                    ),
-                    color = if (isSelected) White else Black
                 )
             }
         }
@@ -246,17 +176,21 @@ fun ProductCard(
         ) {
             Text(
                 text = product.title,
-                style = Typography.titleMedium.copy(fontSize = 16.sp, lineHeight = 20.sp),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
                 color = Black,
                 maxLines = 2
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = product.category,
-                style = Typography.labelMedium,
+                style = MaterialTheme.typography.labelMedium,
                 color = Description
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -264,21 +198,17 @@ fun ProductCard(
             ) {
                 Text(
                     text = product.price,
-                    style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = Black
                 )
-                Button(
+
+                CommonButton(
+                    text = "Добавить",
+                    isSmall = true,
+                    style = ButtonStyle.Active,
                     onClick = onAddClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Accent),
-                    shape = RoundedCornerShape(12.dp),
-                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
-                    modifier = Modifier.height(40.dp)
-                ) {
-                    Text(
-                        text = "Добавить",
-                        style = Typography.labelLarge.copy(color = White, fontWeight = FontWeight.Medium)
-                    )
-                }
+                    modifier = Modifier.width(110.dp)
+                )
             }
         }
     }

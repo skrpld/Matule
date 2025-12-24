@@ -27,7 +27,7 @@ import com.skrpld.uikit.theme.InputBackground
 import com.skrpld.uikit.R
 
 @Composable
-fun AppTextField(
+fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -124,45 +124,45 @@ fun AppTextFieldsGalleryPreview() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        AppTextField(
+        TextField(
             value = "",
             onValueChange = {},
             placeholder = "Введите имя"
         )
-        AppTextField(
+        TextField(
             value = "Иван",
             onValueChange = {}
         )
-        AppTextField(
+        TextField(
             label = "Имя",
             value = "",
             onValueChange = {},
             placeholder = "Введите имя"
         )
-        AppTextField(
+        TextField(
             label = "Имя",
             value = "",
             onValueChange = {},
             placeholder = "Имя",
             error = "Введите ваше имя"
         )
-        AppTextField(
+        TextField(
             label = "Имя",
             value = "",
             onValueChange = {},
             placeholder = "Введите имя"
         )
-        AppTextField(
+        TextField(
             label = "Имя",
             value = "Введите имя",
             onValueChange = {}
         )
-        AppTextField(
+        TextField(
             value = "password123",
             onValueChange = {},
             isPassword = true
         )
-        AppTextField(
+        TextField(
             value = "",
             onValueChange = {},
             placeholder = "--.--.----"

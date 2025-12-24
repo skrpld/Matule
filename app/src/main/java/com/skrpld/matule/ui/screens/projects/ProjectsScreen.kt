@@ -1,61 +1,46 @@
 package com.skrpld.matule.ui.screens.projects
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.skrpld.matule.data.models.Project
-import com.skrpld.matule.ui.components.AppBottomBar
-import com.skrpld.matule.ui.navigation.AppNavigation
-import com.skrpld.matule.ui.theme.Accent
-import com.skrpld.matule.ui.theme.Black
-import com.skrpld.matule.ui.theme.Caption
-import com.skrpld.matule.ui.theme.Description
-import com.skrpld.matule.ui.theme.InputBackground
-import com.skrpld.matule.ui.theme.Typography
-import com.skrpld.matule.ui.theme.White
+import com.skrpld.uikit.R
+import com.skrpld.uikit.components.TabBar
+import com.skrpld.uikit.components.buttons.ButtonStyle
+import com.skrpld.uikit.components.buttons.CommonButton
+import com.skrpld.uikit.theme.Black
+import com.skrpld.uikit.theme.Caption
+import com.skrpld.uikit.theme.Description
+import com.skrpld.uikit.theme.InputBackground
+import com.skrpld.uikit.theme.White
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProjectsScreen(
-    navController: NavController,
-    viewModel: ProjectsViewModel = hiltViewModel(),
+    onNavigateToTab: (Int) -> Unit,
+    onAddProject: () -> Unit,
+    viewModel: ProjectsViewModel = koinViewModel(),
 ) {
-    val navigation = remember(navController) { AppNavigation(navController as androidx.navigation.NavHostController) }
     val projects by viewModel.projects.collectAsState()
 
     Scaffold(
-        bottomBar = { AppBottomBar(navController) },
+        bottomBar = {
+            TabBar(
+                selectedIndex = 2,
+                onItemSelected = { index -> onNavigateToTab(index) }
+            )
+        },
         containerColor = InputBackground
     ) { paddingValues ->
         LazyColumn(
@@ -68,12 +53,14 @@ fun ProjectsScreen(
             item {
                 Spacer(modifier = Modifier.height(16.dp))
                 ProjectsHeader(
-                    onAddClick = { viewModel.onAddProjectClick(navigation) }
+                    onAddClick = onAddProject
                 )
-                Spacer(modifier = Modifier.height(8.dp))
             }
 
-            items(projects) { project ->
+            items(
+                items = projects,
+                key = { it.id }
+            ) { project ->
                 ProjectItemCard(
                     project = project,
                     onOpenClick = { viewModel.onOpenProject(project.id) }
@@ -89,29 +76,27 @@ fun ProjectsScreen(
 fun ProjectsHeader(
     onAddClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = "Проекты",
-                style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = Black,
-                modifier = Modifier.align(Alignment.Center)
-            )
+        Text(
+            text = "Проекты",
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = Black,
+            modifier = Modifier.align(Alignment.Center)
+        )
 
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add Project",
-                tint = Caption,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .clickable { onAddClick() }
-                    .size(28.dp)
-            )
-        }
+        Icon(
+            painter = painterResource(id = R.drawable.ic_plus),
+            contentDescription = "Add Project",
+            tint = Caption,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .size(28.dp)
+                .clickable { onAddClick() }
+        )
     }
 }
 
@@ -136,8 +121,9 @@ fun ProjectItemCard(
         ) {
             Text(
                 text = project.title,
-                style = Typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
-                color = Black
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = Black,
+                maxLines = 1
             )
 
             Row(
@@ -147,26 +133,17 @@ fun ProjectItemCard(
             ) {
                 Text(
                     text = project.dateDisplay,
-                    style = Typography.labelMedium,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Description
                 )
 
-                Button(
+                CommonButton(
+                    text = "Открыть",
+                    isSmall = true,
+                    style = ButtonStyle.Active,
                     onClick = onOpenClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Accent),
-                    shape = RoundedCornerShape(10.dp),
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
-                    modifier = Modifier.height(34.dp)
-                ) {
-                    Text(
-                        text = "Открыть",
-                        style = Typography.labelLarge.copy(
-                            color = White,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 13.sp
-                        )
-                    )
-                }
+                    modifier = Modifier.width(100.dp)
+                )
             }
         }
     }

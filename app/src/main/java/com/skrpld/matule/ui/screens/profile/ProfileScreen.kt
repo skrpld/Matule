@@ -1,46 +1,37 @@
 package com.skrpld.matule.ui.screens.profile
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.skrpld.matule.ui.components.AppBottomBar
-import com.skrpld.matule.ui.theme.Accent
-import com.skrpld.matule.ui.theme.Caption
-import com.skrpld.matule.ui.theme.Error
-import com.skrpld.matule.ui.theme.White
+import com.skrpld.uikit.R
+import com.skrpld.uikit.components.TabBar
+import com.skrpld.uikit.components.controls.Toggle
+import com.skrpld.uikit.theme.Caption
+import com.skrpld.uikit.theme.Error
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileScreen(
-    navController: NavController,
-    viewModel: ProfileViewModel = hiltViewModel()
+    onNavigateToTab: (Int) -> Unit,
+    viewModel: ProfileViewModel = koinViewModel()
 ) {
     val firstName = viewModel.firstName
     val email = viewModel.email
     val showNotification = viewModel.showNotifications
 
     Scaffold(
-        bottomBar = { AppBottomBar(navController) },
+        bottomBar = {
+            TabBar(
+                selectedIndex = 3,
+                onItemSelected = { index -> onNavigateToTab(index) }
+            )
+        },
         containerColor = Color.White
     ) { paddingValues ->
         Column(
@@ -52,35 +43,36 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = firstName,
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     text = email,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Caption)
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Caption
                 )
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(30.dp)) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) { /* TODO: Навигация на заказы */ },
+                        .clickable { /* TODO: Навигация на заказы */ },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "📋", fontSize = 32.sp) //TODO: Должна быть иконка
+                    Icon(
+                        painter = painterResource(id = R.drawable.order),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black
+                    )
 
                     Spacer(modifier = Modifier.width(16.dp))
 
@@ -90,13 +82,16 @@ fun ProfileScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(30.dp))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "⚙️", fontSize = 32.sp) //TODO: Должна быть иконка
+                    Icon(
+                        painter = painterResource(id = R.drawable.settings),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black
+                    )
 
                     Spacer(modifier = Modifier.width(16.dp))
 
@@ -106,17 +101,9 @@ fun ProfileScreen(
                         style = MaterialTheme.typography.titleSmall
                     )
 
-                    Switch(
+                    Toggle(
                         checked = showNotification,
-                        onCheckedChange = {
-                            viewModel.toggleNotifications()
-                        },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = White,
-                            checkedTrackColor = Accent,
-                            uncheckedThumbColor = White,
-                            uncheckedTrackColor = Caption
-                        )
+                        onCheckedChange = { viewModel.toggleNotifications() }
                     )
                 }
             }
@@ -127,38 +114,36 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
                 Text(
                     text = "Политика конфиденциальности",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Caption),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Caption,
                     modifier = Modifier.clickable {
-                        TODO("Политика конфиденциальности")
+                        /* TODO: Открыть политику */
                     }
                 )
-
-                Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
                     text = "Пользовательское соглашение",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Caption),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Caption,
                     modifier = Modifier.clickable {
-                        TODO("Пользовательское соглашение")
+                        /* TODO: Открыть соглашение */
                     }
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
-
                 Text(
                     text = "Выход",
-                    style = MaterialTheme.typography.bodyLarge.copy(color = Error),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Error,
                     modifier = Modifier.clickable {
                         viewModel.logout()
                     }
                 )
             }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

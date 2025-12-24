@@ -6,19 +6,12 @@ class AppNavigation(
     private val navController: NavHostController
 ) {
     /**
-     * App start
+     * Login / Signup
      */
-    fun navigateToSplash() {
-        navController.navigate(AppDestinations.SPLASH_ROUTE)
-    }
-
     fun navigateToLock() {
         navController.navigate(AppDestinations.LOCK_ROUTE)
     }
 
-    /**
-     * Login / Signup
-     */
     fun navigateToLogin() {
         navController.navigate(AppDestinations.LOGIN_ROUTE) {
             popUpTo(navController.graph.id) {
@@ -52,10 +45,6 @@ class AppNavigation(
 
     fun navigateToCatalog() {
         navController.navigate(AppDestinations.CATALOG_ROUTE)
-    }
-
-    fun navigateToCart() {
-        navController.navigate(AppDestinations.CART_ROUTE)
     }
 
     fun navigateToProfile() {
